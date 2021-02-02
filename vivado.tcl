@@ -1,9 +1,12 @@
 set outputDir ./vivado
+set dataDir ./data
+set rtlDir ./rtl
+set topModule mkTop
 
-read_verilog mkTop.v
-read_xdc ./data/Cmod-A7-Master.xdc
+read_verilog $rtlDir/$topModule.v
+read_xdc $dataDir/Cmod-A7-Master.xdc
 
-synth_design -top mkTop -part xc7a35tcpg236-1
+synth_design -top $topModule -part xc7a35tcpg236-1
 write_checkpoint -force $outputDir/post_synth
 report_timing_summary -file $outputDir/post_synth_timing_summary.rpt
 report_power -file $outputDir/post_synth_power.rpt
@@ -25,6 +28,6 @@ report_drc -file $outputDir/post_imp_drc.rpt
 write_verilog -force $outputDir/top_impl_netlist.v
 write_xdc -no_fixed_only -force $outputDir/top_impl.xdc
 
-write_bitstream -force $outputDir/mkTop.bit
+write_bitstream -force $outputDir/$topModule.bit
 
 quit
